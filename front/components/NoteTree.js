@@ -1,5 +1,6 @@
 import React from "react";
 import { Tree } from "antd";
+import { DownOutlined } from '@ant-design/icons';
 
 const x = 3;
 const y = 2;
@@ -56,7 +57,7 @@ class Demo extends React.Component {
     const dropPos = info.node.pos.split("-");
     const dropPosition =
       info.dropPosition - Number(dropPos[dropPos.length - 1]);
-    const openExpandedKeys = this.state.expandedKeys.concat(info.node.key);
+    // const openExpandedKeys = this.state.expandedKeys.concat(info.node.key);
 
     const loop = (data, key, callback) => {
       for (let i = 0; i < data.length; i++) {
@@ -116,7 +117,7 @@ class Demo extends React.Component {
 
   render() {
     return (
-      <Tree
+      <Tree        
         className="draggable-tree"
         defaultExpandedKeys={this.state.expandedKeys}
         draggable
@@ -124,6 +125,8 @@ class Demo extends React.Component {
         onDragEnter={this.onDragEnter}
         onDrop={this.onDrop}
         treeData={this.state.gData}
+        showLine={{showLeafIcon: false}}
+        switcherIcon={<DownOutlined />}
       />
     );
   }
