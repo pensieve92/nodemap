@@ -1,6 +1,7 @@
 import { Tabs } from 'antd';
 
 import DraggableTabs from './DraggableTabs';
+import NoteTabContent from './NoteTabContent';
 
 const { TabPane } = Tabs;
 
@@ -73,10 +74,11 @@ class Demo extends React.Component {
         onChange={this.onChange}
         activeKey={activeKey}
         onEdit={this.onEdit}
+        style={{width:"100%"}} 
       >
         {panes.map(pane => (
-          <TabPane tab={pane.title} key={pane.key} closable={pane.closable}>
-            {pane.content}
+          <TabPane tab={pane.title} key={pane.key} closable={pane.closable}>            
+            <NoteTabContent data={pane.content} />
           </TabPane>
         ))}
       </DraggableTabs>

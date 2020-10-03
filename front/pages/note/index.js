@@ -19,11 +19,11 @@ const Note = () => {
                 <title>Note | NodeMap</title>
             </Head>            
             <div style={{display:"flex"}}>
-                <div>
-                    <Button>작성하기</Button>
+                <div style={{width:"180px", marginRight:"10px"}} >
+                    <Button style={{width:"140px", height:"50px", marginLeft:"20px", marginRight:"20px", marginBottom:"5px"}}>작성하기</Button>
                     <NoteTree />
                 </div>
-                <NoteTab />
+                <NoteTab style={{width:"100%"}} />
             </div>
         </ContentLayout>
     )
