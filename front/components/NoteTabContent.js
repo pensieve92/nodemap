@@ -5,8 +5,7 @@ import QuillEditor from './QuillEditor';
 
 
 const NoteTabContent = ({data}) => {    
-    return (
-        
+    return (        
         <div>            
             {data}
             <QuillEditor />
