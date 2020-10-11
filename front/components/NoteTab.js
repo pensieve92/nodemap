@@ -3,7 +3,6 @@ import { Tabs } from 'antd';
 import DraggableTabs from './DraggableTabs';
 import NoteTabContainer from './NoteTabContainer';
 
-
 const { TabPane } = Tabs;
 
 const initialPanes = [
