@@ -1,6 +1,7 @@
 import React from "react";
 import { Tree } from "antd";
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined, PlusCircleOutlined, EditOutlined, MinusCircleOutlined } from '@ant-design/icons';
+
 
 const x = 3;
 const y = 2;
@@ -14,7 +15,18 @@ const generateData = (_level, _preKey, _tns) => {
   const children = [];
   for (let i = 0; i < x; i++) {
     const key = `${preKey}-${i}`;
-    tns.push({ title: key, key });
+    const treeNode = (
+      <div>
+          {key}
+          <div style={{float:"right"}}>
+            <PlusCircleOutlined onClick={function(e, node){e.persist(); console.log(node); e.preventDefault(); console.log(e);   console.log("add")}}/>
+            <EditOutlined />
+            <MinusCircleOutlined />
+          </div>
+        </div>
+      );    
+    // tns.push({ title: key, key });
+    tns.push({ title: treeNode, key });
     if (i < y) {
       children.push(key);
     }
@@ -35,17 +47,14 @@ class Demo extends React.Component {
     gData,
     expandedKeys: ["0-0", "0-0-0", "0-0-0-0"]
   };
-  onClick = (event) => {
-    event.persist();
-    console.log(event);
-    console.log(event.target);
+
+  onEvent(ev) {
+    console.log('onEvent', ev);
   }
 
-  onDoubleClick = (event) => {
+  onDoubleClick = (event, node) => {
     event.persist();
-    console.log(event);
-    console.log(event.target);
-    console.log(event.target.value);
+    console.log(node);
   }
 
   onDragEnter = (info) => {
@@ -134,14 +143,15 @@ class Demo extends React.Component {
         defaultExpandedKeys={this.state.expandedKeys}
         draggable
         blockNode
-        // onClick={this.onClick}
         onDoubleClick={this.onDoubleClick}
         onDragEnter={this.onDragEnter}
         onDrop={this.onDrop}
         treeData={this.state.gData}
         showLine={{showLeafIcon: false}}
         switcherIcon={<DownOutlined />}
-      />
+      >
+        
+      </Tree>
     );
   }
 }
