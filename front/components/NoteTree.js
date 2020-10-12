@@ -35,6 +35,18 @@ class Demo extends React.Component {
     gData,
     expandedKeys: ["0-0", "0-0-0", "0-0-0-0"]
   };
+  onClick = (event) => {
+    event.persist();
+    console.log(event);
+    console.log(event.target);
+  }
+
+  onDoubleClick = (event) => {
+    event.persist();
+    console.log(event);
+    console.log(event.target);
+    console.log(event.target.value);
+  }
 
   onDragEnter = (info) => {
     info.event.persist();
@@ -122,6 +134,8 @@ class Demo extends React.Component {
         defaultExpandedKeys={this.state.expandedKeys}
         draggable
         blockNode
+        // onClick={this.onClick}
+        onDoubleClick={this.onDoubleClick}
         onDragEnter={this.onDragEnter}
         onDrop={this.onDrop}
         treeData={this.state.gData}
