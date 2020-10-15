@@ -2,54 +2,101 @@ import React from "react";
 import { Tree } from "antd";
 import { DownOutlined, PlusCircleOutlined, EditOutlined, MinusCircleOutlined } from '@ant-design/icons';
 
+import { deepClone } from '../utils'
 
-const x = 3;
-const y = 2;
-const z = 1;
-const gData = [];
-
-const generateData = (_level, _preKey, _tns) => {
-  const preKey = _preKey || "0";
-  const tns = _tns || gData;
-
-  const children = [];
-  for (let i = 0; i < x; i++) {
-    const key = `${preKey}-${i}`;
-    const treeNode = (
-      <div>
-          {key}
-          <div style={{float:"right"}}>
-            <PlusCircleOutlined onClick={function(e, node){e.persist(); console.log(node); e.preventDefault(); console.log(e);   console.log("add")}}/>
-            <EditOutlined />
-            <MinusCircleOutlined />
-          </div>
-        </div>
-      );    
-    // tns.push({ title: key, key });
-    tns.push({ title: treeNode, key });
-    if (i < y) {
-      children.push(key);
-    }
+const gData = [
+  {
+    title: "0-0", 
+    key: "0-0",     
+    children: [
+      {
+        title: "0-0-0", 
+        key: "0-0-0", 
+        children: [
+          {
+            title: "0-0-0-0", 
+            key: "0-0-0-0"             
+          },
+          {
+            title: "0-0-0-1", 
+            key: "0-0-0-1"             
+          }
+        ]
+      },  
+    ]
   }
-  if (_level < 0) {
-    return tns;
-  }
-  const level = _level - 1;
-  children.forEach((key, index) => {
-    tns[index].children = [];
-    return generateData(level, key, tns[index].children);
-  });
-};
-generateData(z);
+];
 
 class Demo extends React.Component {
   state = {
     gData,
-    expandedKeys: ["0-0", "0-0-0", "0-0-0-0"]
+    expandedKeys: ["0-0", "0-0-0", "0-0-0-0"],
+    isAddNode: false,
+    isEditNode: false,
+    isDeleteNode: false,
   };
 
-  onEvent(ev) {
-    console.log('onEvent', ev);
+  generateData = (_tns) => {  
+    // const tns = _tns || gData;    // _tns (배열) 매개변수가 없으면 gData를 받아서 사용한다.  
+    const tns = _tns;
+
+    if(tns.length > 0){
+      for(let i = 0; i< tns.length; i++ ){
+        const title = tns[i].title;
+        const treeNode = (
+          <div>
+            {title}
+            <div style={{float:"right"}}>
+              <PlusCircleOutlined onClick={
+                  (event) => {
+                    event.persist();
+                    // event.preventDefault();
+                    // console.log("addButton", event);                  
+                  }
+                }/>
+              <EditOutlined />
+              <MinusCircleOutlined />
+            </div>
+          </div>
+        );
+        tns[i].title = treeNode;      
+        if(tns[i].children){
+          this.generateData(tns[i].children);
+        }
+      }
+    }
+    return tns;
+  };
+
+  // FIXME 2
+  // 버튼 클릭 이벤트 만들고, 만들기 ...
+  // 추가, 수정, 삭제 버튼 클릭시, Flag변수로 해당하는 버튼 확인
+  onSelect = (selectedKeys, event) => {        
+    console.log("onSelect selectedKeys", selectedKeys);
+    console.log("onSelect event", event);
+
+    // [...this.state.gData]
+
+    console.log("isAddNode", this.state.isAddNode);
+    // if(this.state.isAddNode){
+    //   this.setState({
+    //     isAddNode : !this.state.isAddNode      
+    //   });
+    //   return;
+    // }else{
+
+    // }
+    
+    // this.state.isAddNode && console.log("isAddNode", this.state.isAddNode);
+    // this.state.isEditNode && console.log("isEditNode", this.state.isEditNode);
+    // this.state.isDeleteNode && console.log("isDeleteNode", this.state.isDeleteNode);
+
+    // this.setState({
+    //   isAddNode : false,
+    //   isEditNode : false,
+    //   isDeleteNode : false
+    //   // expandedKeys: openExpandedKeys
+    // });
   }
 
   onDoubleClick = (event, node) => {
@@ -136,22 +183,28 @@ class Demo extends React.Component {
     });
   };
 
+  handleAddButton () {
+    this.setState({isAddButton: true})
+  }
+
   render() {
+    // this.generateData(this.state.gData);
+    const isAddButton = this.state.isAddButton;
+
     return (
       <Tree        
         className="draggable-tree"
         defaultExpandedKeys={this.state.expandedKeys}
         draggable
         blockNode
+        onSelect={this.onSelect}
         onDoubleClick={this.onDoubleClick}
         onDragEnter={this.onDragEnter}
         onDrop={this.onDrop}
-        treeData={this.state.gData}
+        treeData={this.generateData(deepClone(this.state.gData))}
         showLine={{showLeafIcon: false}}
         switcherIcon={<DownOutlined />}
-      >
-        
-      </Tree>
+      />      
     );
   }
 }
