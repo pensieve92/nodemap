@@ -31,9 +31,8 @@ class Demo extends React.Component {
   state = {
     gData,
     expandedKeys: ["0-0", "0-0-0", "0-0-0-0"],
-    isAddNode: false,
-    isEditNode: false,
-    isDeleteNode: false,
+    editNodeMode: "", // creatNode, editNode, deleteNode    
+    selectedKeys:[],
   };
 
   generateData = (_tns) => {  
@@ -47,15 +46,21 @@ class Demo extends React.Component {
           <div>
             {title}
             <div style={{float:"right"}}>
-              <PlusCircleOutlined onClick={
-                  (event) => {
-                    event.persist();
-                    // event.preventDefault();
-                    // console.log("addButton", event);                  
+              <PlusCircleOutlined onClick={                
+                  (e) => {                   
+                    // e.persist();
+                    // e.preventDefault();                    
+                    this.setState({editNodeMode: "creatNode"})
                   }
                 }/>
-              <EditOutlined />
-              <MinusCircleOutlined />
+              <EditOutlined                 
+                onClick={
+                  () => {this.setState({editNodeMode: "editNode"})}
+                }
+              />
+              <MinusCircleOutlined  onClick={
+                () => {this.setState({editNodeMode: "deleteNode"})}
+              } />
             </div>
           </div>
         );
@@ -71,32 +76,10 @@ class Demo extends React.Component {
   // FIXME 2
   // 버튼 클릭 이벤트 만들고, 만들기 ...
   // 추가, 수정, 삭제 버튼 클릭시, Flag변수로 해당하는 버튼 확인
-  onSelect = (selectedKeys, event) => {        
-    console.log("onSelect selectedKeys", selectedKeys);
-    console.log("onSelect event", event);
-
-    // [...this.state.gData]
-
-    console.log("isAddNode", this.state.isAddNode);
-    // if(this.state.isAddNode){
-    //   this.setState({
-    //     isAddNode : !this.state.isAddNode      
-    //   });
-    //   return;
-    // }else{
-
-    // }
-    
-    // this.state.isAddNode && console.log("isAddNode", this.state.isAddNode);
-    // this.state.isEditNode && console.log("isEditNode", this.state.isEditNode);
-    // this.state.isDeleteNode && console.log("isDeleteNode", this.state.isDeleteNode);
-
-    // this.setState({
-    //   isAddNode : false,
-    //   isEditNode : false,
-    //   isDeleteNode : false
-    //   // expandedKeys: openExpandedKeys
-    // });
+  onSelect = (selectedKeys, event) => {
+    this.setState({selectedKeys: selectedKeys});
+    // console.log("onSelect selectedKeys", selectedKeys);
+    // console.log("onSelect event", event);
   }
 
   onDoubleClick = (event, node) => {
@@ -183,28 +166,41 @@ class Demo extends React.Component {
     });
   };
 
-  handleAddButton () {
-    this.setState({isAddButton: true})
+  editNode = () => {
+    const editNodeMode = this.state.editNodeMode;
+    const selectedKeys = this.state.selectedKeys;
+
+    console.log(editNodeMode);
+    if(editNodeMode == "creatNode"){
+      prompt("creatNode", selectedKeys);
+    }else if(editNodeMode == "editNode"){
+      prompt("editNode", selectedKeys);
+    }else if(editNodeMode == "deleteNode"){
+      prompt("deleteNode", selectedKeys);
+    }else {
+      return;
+    }
   }
 
   render() {
-    // this.generateData(this.state.gData);
-    const isAddButton = this.state.isAddButton;
 
     return (
-      <Tree        
-        className="draggable-tree"
-        defaultExpandedKeys={this.state.expandedKeys}
-        draggable
-        blockNode
-        onSelect={this.onSelect}
-        onDoubleClick={this.onDoubleClick}
-        onDragEnter={this.onDragEnter}
-        onDrop={this.onDrop}
-        treeData={this.generateData(deepClone(this.state.gData))}
-        showLine={{showLeafIcon: false}}
-        switcherIcon={<DownOutlined />}
-      />      
+      <>        
+        {this.editNode()}
+        <Tree        
+          className="draggable-tree"
+          defaultExpandedKeys={this.state.expandedKeys}
+          draggable
+          blockNode
+          onSelect={this.onSelect}
+          onDoubleClick={this.onDoubleClick}
+          onDragEnter={this.onDragEnter}
+          onDrop={this.onDrop}
+          treeData={this.generateData(deepClone(this.state.gData))}
+          showLine={{showLeafIcon: false}}
+          switcherIcon={<DownOutlined />}
+        />      
+      </>
     );
   }
 }
