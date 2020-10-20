@@ -6,34 +6,74 @@ import { deepClone } from '../utils'
 
 const gData = [
   {
-    title: "0-0", 
-    key: "0-0",     
+    title: "HOME",
+    key: "0",
     children: [
       {
-        title: "0-0-0", 
-        key: "0-0-0", 
+        title: "0-0", 
+        key: "0-0",     
         children: [
           {
-            title: "0-0-0-0", 
-            key: "0-0-0-0"             
-          },
-          {
-            title: "0-0-0-1", 
-            key: "0-0-0-1"             
-          }
+            title: "0-0-0", 
+            key: "0-0-0", 
+            children: [
+              {
+                title: "0-0-0-0", 
+                key: "0-0-0-0"             
+              },
+              {
+                title: "0-0-0-1", 
+                key: "0-0-0-1"             
+              }
+            ]
+          },  
         ]
-      },  
+      }
     ]
-  }
+  } 
 ];
 
 class Demo extends React.Component {
   state = {
     gData,
-    expandedKeys: ["0-0", "0-0-0", "0-0-0-0"],
+    expandedKeys: ["0", "0-0", "0-0-0", "0-0-0-0"],
     editNodeMode: "", // creatNode, editNode, deleteNode    
     selectedKeys:[],
   };
+
+  
+
+  locateKey = (parentKey) => {
+    // 
+    const loop = (data, key, callback) => {
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].key === key) {  // i차에 key가 있을경우
+          return callback(data[i], i, data);  
+        }
+        if (data[i].children) {     // i차에 key가 없고, children이 있을경우 
+          loop(data[i].children, key, callback);  // children에서 key를 찾기 loop
+        }
+      }
+    };
+    const data = [...this.state.gData];
+    
+    const addObj = { title: "new Node", key: parentKey + "-0"};
+
+    // Find dragObject    
+    loop(data, parentKey, (item, index, arr) => {
+      if((item.children || []).length > 0 ){
+        item.children.unshift(addObj);
+      }else{
+        item.children = [addObj];
+      }      
+    });
+
+    this.setState({
+      gData: data
+      // expandedKeys: openExpandedKeys
+    });
+
+  }
 
   generateData = (_tns) => {  
     // const tns = _tns || gData;    // _tns (배열) 매개변수가 없으면 gData를 받아서 사용한다.  
@@ -166,26 +206,75 @@ class Demo extends React.Component {
     });
   };
 
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    console.log("this.props", this.props);
+    console.log("prevProps", prevProps);
+    // if (this.props.userID !== prevProps.userID) {
+    //   this.fetchData(this.props.userID);
+    // }
+  }
+
   editNode = () => {
     const editNodeMode = this.state.editNodeMode;
     const selectedKeys = this.state.selectedKeys;
+    // const gData = this.state.gData;
+
+    const loop = (data, key, callback) => {
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].key === key) {  // i차에 key가 있을경우
+          return callback(data[i], i, data);  
+        }
+        if (data[i].children) {     // i차에 key가 없고, children이 있을경우 
+          loop(data[i].children, key, callback);  // children에서 key를 찾기 loop
+        }
+      }
+    };
+    const data = [...this.state.gData];
 
     console.log(editNodeMode);
-    if(editNodeMode == "creatNode"){
-      prompt("creatNode", selectedKeys);
-    }else if(editNodeMode == "editNode"){
+    if(editNodeMode === "creatNode"){
+      const title = prompt("creatNode", selectedKeys);  
+      if(!title) {
+        return;
+      }else {
+        const addObj = { title: title };
+        // Find dragObject    
+        loop(data, selectedKeys[0], (item, index, arr) => {
+
+          console.log("find selectec Object", item);
+          if((item.children || []).length > 0 ){
+            addObj.key = selectedKeys + "-" + item.children.length;            
+            item.children.unshift(addObj);            
+          }else{
+            addObj.key = selectedKeys + "-0" ;
+            item.children = [];
+            item.children.unshift(addObj);  
+            console.log("no children data", data);
+          }      
+        });
+      }
+
+    }else if(editNodeMode === "editNode"){
       prompt("editNode", selectedKeys);
-    }else if(editNodeMode == "deleteNode"){
+    }else if(editNodeMode === "deleteNode"){
       prompt("deleteNode", selectedKeys);
     }else {
       return;
     }
+
+    // editNodeMode reset
+    this.setState({
+      gData: data,
+      editNodeMode: "",
+    })
   }
 
   render() {
 
     return (
-      <>        
+      <>     
+        
         {this.editNode()}
         <Tree        
           className="draggable-tree"
