@@ -37,48 +37,16 @@ class Demo extends React.Component {
   state = {
     gData,
     expandedKeys: ["0", "0-0", "0-0-0", "0-0-0-0"],
-    editNodeMode: "", // creatNode, editNode, deleteNode    
-    selectedKeys:[],
+    editNodeMode: "", // createNode, updateNode, deleteNode    
+    createNodeTitle: "",
+    updateNodeTitle: "",
+    isDeleteNode: false,
+    selectedKey:"",
   };
-
-  
-
-  locateKey = (parentKey) => {
-    // 
-    const loop = (data, key, callback) => {
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].key === key) {  // i차에 key가 있을경우
-          return callback(data[i], i, data);  
-        }
-        if (data[i].children) {     // i차에 key가 없고, children이 있을경우 
-          loop(data[i].children, key, callback);  // children에서 key를 찾기 loop
-        }
-      }
-    };
-    const data = [...this.state.gData];
-    
-    const addObj = { title: "new Node", key: parentKey + "-0"};
-
-    // Find dragObject    
-    loop(data, parentKey, (item, index, arr) => {
-      if((item.children || []).length > 0 ){
-        item.children.unshift(addObj);
-      }else{
-        item.children = [addObj];
-      }      
-    });
-
-    this.setState({
-      gData: data
-      // expandedKeys: openExpandedKeys
-    });
-
-  }
-
-  generateData = (_tns) => {  
-    // const tns = _tns || gData;    // _tns (배열) 매개변수가 없으면 gData를 받아서 사용한다.  
+ 
+  generateData = (_tns, selectedKey) => {  
+    // const tns = _tns || gData;    // _tns (배열) 매개변수가 없으면 gData를 받아서 사용한다.      
     const tns = _tns;
-
     if(tns.length > 0){
       for(let i = 0; i< tns.length; i++ ){
         const title = tns[i].title;
@@ -86,13 +54,18 @@ class Demo extends React.Component {
           <div>
             {title}
             <div style={{float:"right"}}>
-              <PlusCircleOutlined onClick={                
-                  (e) => {                   
-                    // e.persist();
-                    // e.preventDefault();                    
-                    this.setState({editNodeMode: "creatNode"})
+              <PlusCircleOutlined 
+                onClick={    // FIXME   
+                  () => {
+                    const createNodeTitle = prompt("노드 생성");
+                    if(!createNodeTitle){
+                      return;
+                    }else{
+                      this.setState({createNodeTitle: createNodeTitle})
+                    }
                   }
-                }/>
+                }
+              />
               <EditOutlined                 
                 onClick={
                   () => {this.setState({editNodeMode: "editNode"})}
@@ -113,14 +86,9 @@ class Demo extends React.Component {
     return tns;
   };
 
-  // FIXME 2
-  // 버튼 클릭 이벤트 만들고, 만들기 ...
-  // 추가, 수정, 삭제 버튼 클릭시, Flag변수로 해당하는 버튼 확인
   onSelect = (selectedKeys, event) => {
-    this.setState({selectedKeys: selectedKeys});
-    // console.log("onSelect selectedKeys", selectedKeys);
-    // console.log("onSelect event", event);
-  }
+    this.setState({selectedKey: event.node.key});
+  };
 
   onDoubleClick = (event, node) => {
     event.persist();
@@ -206,76 +174,90 @@ class Demo extends React.Component {
     });
   };
 
-  componentDidUpdate(prevProps) {
-    // Typical usage (don't forget to compare props):
-    console.log("this.props", this.props);
-    console.log("prevProps", prevProps);
-    // if (this.props.userID !== prevProps.userID) {
-    //   this.fetchData(this.props.userID);
-    // }
+  findNodeKey = (data, key, callback) => {
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].key === key) {  // i차에 key가 있을경우
+        return callback(data[i], i, data);  
+      }
+      if (data[i].children) {     // i차에 key가 없고, children이 있을경우 
+        this.findNodeKey(data[i].children, key, callback);  // children에서 key를 찾기 loop
+      }
+    }
+  }; 
+
+  // component update시, render 후 실행
+  componentDidUpdate(prevProps, prevState, snapshot) {    
+    if (this.state.editNodeMode !== prevState.editNodeMode) {
+      this.setState({editNodeMode: ""})
+    }
+    if (this.state.createNodeTitle !== prevState.createNodeTitle) {
+      this.setState({createNodeTitle: ""})
+    }
+    if (this.state.updateNodeTitle !== prevState.updateNodeTitle) {
+      this.setState({updateNodeTitle: ""})
+    }
+    if (this.state.isDeleteNode !== prevState.isDeleteNode) {
+      this.setState({isDeleteNode: ""})
+    }
   }
 
-  editNode = () => {
-    const editNodeMode = this.state.editNodeMode;
-    const selectedKeys = this.state.selectedKeys;
-    // const gData = this.state.gData;
+  render() {    
+    const selectedKey = this.state.selectedKey;    
+    const treeData = this.generateData(deepClone(this.state.gData), selectedKey);
 
-    const loop = (data, key, callback) => {
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].key === key) {  // i차에 key가 있을경우
-          return callback(data[i], i, data);  
-        }
-        if (data[i].children) {     // i차에 key가 없고, children이 있을경우 
-          loop(data[i].children, key, callback);  // children에서 key를 찾기 loop
-        }
-      }
-    };
+    const editNodeMode = this.state.editNodeMode;
     const data = [...this.state.gData];
 
-    console.log(editNodeMode);
-    if(editNodeMode === "creatNode"){
-      const title = prompt("creatNode", selectedKeys);  
-      if(!title) {
-        return;
-      }else {
-        const addObj = { title: title };
-        // Find dragObject    
-        loop(data, selectedKeys[0], (item, index, arr) => {
+    const createNodeTitle = this.state.createNodeTitle;
+    const updateNodeTitle = this.state.updateNodeTitle;
+    const isDeleteNode = this.state.isDeleteNode;
 
-          console.log("find selectec Object", item);
-          if((item.children || []).length > 0 ){
-            addObj.key = selectedKeys + "-" + item.children.length;            
-            item.children.unshift(addObj);            
-          }else{
-            addObj.key = selectedKeys + "-0" ;
-            item.children = [];
-            item.children.unshift(addObj);  
-            console.log("no children data", data);
-          }      
-        });
-      }
+    if(createNodeTitle){
+      const addObj = { title: createNodeTitle };
+      this.findNodeKey(data, selectedKey, (item, index, arr) => {
+        console.log("find selectec Object", item);
+        if((item.children || []).length > 0 ){
+          addObj.key = selectedKey + "-" + item.children.length;            
+          item.children.unshift(addObj);            
+        }else{
+          addObj.key = selectedKey + "-0" ;
+          item.children = [];
+          item.children.unshift(addObj);  
+          console.log("no children data", data);
+        }      
+      });
+    } 
 
-    }else if(editNodeMode === "editNode"){
-      prompt("editNode", selectedKeys);
-    }else if(editNodeMode === "deleteNode"){
-      prompt("deleteNode", selectedKeys);
-    }else {
-      return;
-    }
-
-    // editNodeMode reset
-    this.setState({
-      gData: data,
-      editNodeMode: "",
-    })
-  }
-
-  render() {
+    // if(editNodeMode === "createNode"){
+    //   // const title = prompt("creatNode", selectedKey);  
+    //   if(!title) {
+        
+    //   }else {
+    //     const addObj = { title: title };
+    //     // Find dragObject    
+    //     this.findNodeKey(data, selectedKey, (item, index, arr) => {
+    //       console.log("find selectec Object", item);
+    //       if((item.children || []).length > 0 ){
+    //         addObj.key = selectedKey + "-" + item.children.length;            
+    //         item.children.unshift(addObj);            
+    //       }else{
+    //         addObj.key = selectedKey + "-0" ;
+    //         item.children = [];
+    //         item.children.unshift(addObj);  
+    //         console.log("no children data", data);
+    //       }      
+    //     });
+    //   }
+    // }else if(editNodeMode === "updateNode"){
+    //   prompt("updateNode", selectedKey);
+    // }else if(editNodeMode === "deleteNode"){
+    //   prompt("deleteNode", selectedKey);
+    // }else {
+      
+    // }
 
     return (
-      <>     
-        
-        {this.editNode()}
+      <>        
         <Tree        
           className="draggable-tree"
           defaultExpandedKeys={this.state.expandedKeys}
@@ -285,7 +267,7 @@ class Demo extends React.Component {
           onDoubleClick={this.onDoubleClick}
           onDragEnter={this.onDragEnter}
           onDrop={this.onDrop}
-          treeData={this.generateData(deepClone(this.state.gData))}
+          treeData={treeData}
           showLine={{showLeafIcon: false}}
           switcherIcon={<DownOutlined />}
         />      
