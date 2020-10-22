@@ -68,11 +68,25 @@ class Demo extends React.Component {
               />
               <EditOutlined                 
                 onClick={
-                  () => {this.setState({editNodeMode: "editNode"})}
+                  () => {
+                    const  updateNodeTitle = prompt("노드 수정");
+                    if(!updateNodeTitle){
+                      return;
+                    }else{
+                      this.setState({updateNodeTitle: updateNodeTitle})
+                    }
+                  }
                 }
               />
-              <MinusCircleOutlined  onClick={
-                () => {this.setState({editNodeMode: "deleteNode"})}
+              <MinusCircleOutlined  onClick={                
+                () => {
+                  const isDeleteNode = confirm("삭제하시겠습니까?")
+                  if(isDeleteNode){
+                    this.setState({isDeleteNode: isDeleteNode})
+                  } else{
+                    return;
+                  }
+                }
               } />
             </div>
           </div>
@@ -184,7 +198,7 @@ class Demo extends React.Component {
       }
     }
   }; 
-
+  
   // component update시, render 후 실행
   componentDidUpdate(prevProps, prevState, snapshot) {    
     if (this.state.editNodeMode !== prevState.editNodeMode) {
@@ -197,7 +211,7 @@ class Demo extends React.Component {
       this.setState({updateNodeTitle: ""})
     }
     if (this.state.isDeleteNode !== prevState.isDeleteNode) {
-      this.setState({isDeleteNode: ""})
+      this.setState({isDeleteNode: false})
     }
   }
 
@@ -226,35 +240,15 @@ class Demo extends React.Component {
           console.log("no children data", data);
         }      
       });
+    }else if(updateNodeTitle){
+      this.findNodeKey(data, selectedKey, (item, index, arr) => {
+        item.title = updateNodeTitle;
+      });
+    }else if(isDeleteNode){
+      this.findNodeKey(data, selectedKey, (item, index, arr) => {
+        arr.splice(index, 1);
+      });
     } 
-
-    // if(editNodeMode === "createNode"){
-    //   // const title = prompt("creatNode", selectedKey);  
-    //   if(!title) {
-        
-    //   }else {
-    //     const addObj = { title: title };
-    //     // Find dragObject    
-    //     this.findNodeKey(data, selectedKey, (item, index, arr) => {
-    //       console.log("find selectec Object", item);
-    //       if((item.children || []).length > 0 ){
-    //         addObj.key = selectedKey + "-" + item.children.length;            
-    //         item.children.unshift(addObj);            
-    //       }else{
-    //         addObj.key = selectedKey + "-0" ;
-    //         item.children = [];
-    //         item.children.unshift(addObj);  
-    //         console.log("no children data", data);
-    //       }      
-    //     });
-    //   }
-    // }else if(editNodeMode === "updateNode"){
-    //   prompt("updateNode", selectedKey);
-    // }else if(editNodeMode === "deleteNode"){
-    //   prompt("deleteNode", selectedKey);
-    // }else {
-      
-    // }
 
     return (
       <>        
