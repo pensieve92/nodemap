@@ -3,6 +3,7 @@ import { Tree } from "antd";
 import { DownOutlined, PlusCircleOutlined, EditOutlined, MinusCircleOutlined } from '@ant-design/icons';
 
 import { deepClone } from '../utils'
+import {useDispatch, useSelector} from 'react-redux';
 
 const gData = [
   {
@@ -32,6 +33,7 @@ const gData = [
     ]
   } 
 ];
+
 
 class Demo extends React.Component {
   state = {
@@ -249,7 +251,6 @@ class Demo extends React.Component {
         arr.splice(index, 1);
       });
     } 
-
     return (
       <>        
         <Tree        

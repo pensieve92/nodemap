@@ -3,7 +3,7 @@ import Head from 'next/head';
 import {Button} from 'antd';
 
 import ContentLayout from '../../components/layouts/ContentLayout';
-import NoteTree from '../../components/NoteTree';
+import NoteTree from '../../components/NoteTreeCopy';
 import NoteTab from '../../components/NoteTab';
 
 const Note = () => {
