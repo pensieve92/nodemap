@@ -4,12 +4,13 @@ import { DownOutlined, PlusCircleOutlined, EditOutlined, MinusCircleOutlined } f
 import { useDispatch, useSelector } from 'react-redux';
 
 import { deepClone } from '../utils'
-import {updateTreeAction} from '../reducers/tree'
+// import {updateTreeAction} from '../reducers/tree'
+import {updateTree} from '../slices/tree';
 
 const Demo = () => {
   const dispatch = useDispatch();
   const {gData} = useSelector((state) => (state.tree));
- 
+ console.log('gData', gData);
   const [expandedKeys, setExpandedKeys] = useState(['0-0', '0-0-0', '0-0-0-0']);
   const [selectedKey, setSelectedKey] = useState('');
   const [createNodeTitle, setCreateNodeTitle] = useState('');
@@ -30,27 +31,31 @@ const Demo = () => {
           addObj.key = selectedKey + "-" + item.children.length;            
           item.children.unshift(addObj);
           // setGData(data);
-          dispatch(updateTreeAction(data));
+          // dispatch(updateTreeAction(data));
+          dispatch(updateTree(data));
         }else{
           addObj.key = selectedKey + "-0" ;
           item.children = [];
           item.children.unshift(addObj);
           // setGData(data);
-          dispatch(updateTreeAction(data));
+          // dispatch(updateTreeAction(data));
+          dispatch(updateTree(data));
         }      
       });
     }else if(updateNodeTitle){
       findNodeKey(data, selectedKey, (item, index, arr) => {
         item.title = updateNodeTitle;
         // setGData(data);
-        dispatch(updateTreeAction(data));
+        // dispatch(updateTreeAction(data));
+        dispatch(updateTree(data));
       });
     }else if(isDeleteNode){
       findNodeKey(data, selectedKey, (item, index, arr) => {
         arr.splice(index, 1);
         console.log(arr);
         // setGData(data);
-        dispatch(updateTreeAction(data));
+        // dispatch(updateTreeAction(data));
+        dispatch(updateTree(data));
       });
       
     } 
@@ -62,7 +67,8 @@ const Demo = () => {
       // setGData(data);
       // FIXME
       // 여기 있어야 하나??
-      dispatch(updateTreeAction(data));
+      // dispatch(updateTreeAction(data));
+      dispatch(updateTree(data));
     }
   }, [createNodeTitle, updateNodeTitle, isDeleteNode])
 
@@ -127,7 +133,8 @@ const Demo = () => {
       }
     }
     // setGData(data);    
-    dispatch(updateTreeAction(data));
+    // dispatch(updateTreeAction(data));
+    dispatch(updateTree(data));
   }, [gData]);
 
   const onSelect = useCallback((selectedKeys, event) => {
@@ -142,6 +149,7 @@ const Demo = () => {
   const generateData = (_tns, selectedKey) => {  
     // const tns = _tns || gData;    // _tns (배열) 매개변수가 없으면 gData를 받아서 사용한다.      
     const tns = _tns;
+    console.log('tns', tns);
     if(tns.length > 0){
       for(let i = 0; i< tns.length; i++ ){
         const title = tns[i].title;

@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.4.0",
     "@toast-ui/editor": "^2.4.0",
     "@toast-ui/react-editor": "^2.4.0",
     "@zeit/next-css": "^1.0.1",

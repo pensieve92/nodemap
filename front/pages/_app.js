@@ -5,7 +5,9 @@ import "../styles/antd.less";
 
 import 'codemirror/lib/codemirror.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
-import wrapper from "../store/configureStore";  // 1-4
+// import wrapper from "../store/configureStore";  // 1-4
+import {wrapper} from "../store/store";  // 1-4
+
 
 class MyApp extends App {
   render() {
