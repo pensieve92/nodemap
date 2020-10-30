@@ -2,6 +2,7 @@ import { HYDRATE } from 'next-redux-wrapper'; // redux ssr위해
 
 import user from './user';
 import post from './post';
+import tree from './tree';
 import { combineReducers } from 'redux';
 const initialState = {
     user: {
@@ -27,5 +28,6 @@ const rootReducer = combineReducers({
     },
     user,
     post,
+    tree,
 })
 export default rootReducer;

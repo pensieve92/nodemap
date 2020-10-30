@@ -1,38 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Tree } from 'antd';
 import { DownOutlined, PlusCircleOutlined, EditOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { deepClone } from '../utils'
+import {updateTreeAction} from '../reducers/tree'
 
 const Demo = () => {
-  const [gData, setGData] = useState([
-    {
-      title: "LIBRARY",
-      key: "0",
-      children: [
-        {
-          title: "0-0", 
-          key: "0-0",     
-          children: [
-            {
-              title: "0-0-0", 
-              key: "0-0-0", 
-              children: [
-                {
-                  title: "0-0-0-0", 
-                  key: "0-0-0-0"             
-                },
-                {
-                  title: "0-0-0-1", 
-                  key: "0-0-0-1"             
-                }
-              ]
-            },  
-          ]
-        }
-      ]
-    } 
-  ]);
+  const dispatch = useDispatch();
+  const {gData} = useSelector((state) => (state.tree));
+ 
   const [expandedKeys, setExpandedKeys] = useState(['0-0', '0-0-0', '0-0-0-0']);
   const [selectedKey, setSelectedKey] = useState('');
   const [createNodeTitle, setCreateNodeTitle] = useState('');
@@ -52,24 +29,28 @@ const Demo = () => {
         if((item.children || []).length > 0 ){
           addObj.key = selectedKey + "-" + item.children.length;            
           item.children.unshift(addObj);
-          setGData(data);
+          // setGData(data);
+          dispatch(updateTreeAction(data));
         }else{
           addObj.key = selectedKey + "-0" ;
           item.children = [];
           item.children.unshift(addObj);
-          setGData(data);
+          // setGData(data);
+          dispatch(updateTreeAction(data));
         }      
       });
     }else if(updateNodeTitle){
       findNodeKey(data, selectedKey, (item, index, arr) => {
         item.title = updateNodeTitle;
-        setGData(data);
+        // setGData(data);
+        dispatch(updateTreeAction(data));
       });
     }else if(isDeleteNode){
       findNodeKey(data, selectedKey, (item, index, arr) => {
         arr.splice(index, 1);
         console.log(arr);
-        setGData(data);
+        // setGData(data);
+        dispatch(updateTreeAction(data));
       });
       
     } 
@@ -78,7 +59,10 @@ const Demo = () => {
       setCreateNodeTitle('');
       setUpdateNodeTitle('');
       setIsDeleteNode(false);
-      setGData(data);
+      // setGData(data);
+      // FIXME
+      // 여기 있어야 하나??
+      dispatch(updateTreeAction(data));
     }
   }, [createNodeTitle, updateNodeTitle, isDeleteNode])
 
@@ -142,7 +126,8 @@ const Demo = () => {
         ar.splice(i + 1, 0, dragObj);
       }
     }
-    setGData(data);    
+    // setGData(data);    
+    dispatch(updateTreeAction(data));
   }, [gData]);
 
   const onSelect = useCallback((selectedKeys, event) => {
