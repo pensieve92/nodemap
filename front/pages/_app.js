@@ -5,9 +5,9 @@ import "../styles/antd.less";
 
 import 'codemirror/lib/codemirror.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
-// import wrapper from "../store/configureStore";  // 1-4
-import {wrapper} from "../store/store";  // 1-4
-
+// import wrapper from "../store/configureStore";  // redux-toolKit 적용 전
+import { wrapper } from "../store/store"; // redux-toolKit 적용 후
+import withReduxSaga from 'next-redux-saga';
 
 class MyApp extends App {
   render() {
@@ -17,4 +17,4 @@ class MyApp extends App {
   }
 }
 
-export default wrapper.withRedux(MyApp);  // 1-4.
+export default wrapper.withRedux(withReduxSaga(MyApp));

@@ -34,10 +34,21 @@ const treeSlice = createSlice({
           ],
 	},
 	reducers: {
-		updateTree: (state, action) => {
-            console.log("slice", action)
+		updateTree: (state, action) => {// state 불변성유지
+      console.log("slice", action);
 			state.gData = action.payload;
 			// state.light = !! action.payload.light;
+    },
+    updateTreeRequest: (state, action) => {
+      console.log("slice", action);
+			state.gData = action.payload;
+			// state.light = !! action.payload.light;
+    },
+    updateTreeSuccess: (state, action) => {
+      console.log("updateTreeSuccess", action);			
+    },
+    updateTreeFailure: (state, action) => {
+      console.log("updateTreeFailure", action);
 		},
 	},
 	// extraReducers: {
@@ -47,6 +58,7 @@ const treeSlice = createSlice({
 
 // export const selectClock = state => state.clock;
 
-export const {updateTree} = treeSlice.actions;
-
+export const { updateTree, updateTreeRequest, updateTreeSuccess, updateTreeFailure } = treeSlice.actions; // reducers에 updateTree가 action으로 
+export const sName = treeSlice.name;
+// export const sActions = treeSlice.actions;
 export default treeSlice.reducer;
