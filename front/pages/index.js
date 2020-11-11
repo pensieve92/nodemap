@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Head from 'next/head';
 import { Input, Layout, Menu, Breadcrumb, PageHeader, Tag, Button, Divider, Row, Col, Tooltip, Typography } from 'antd'; 
 import { InfoCircleOutlined, UserOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
+import useInput from '../hooks/useInput';
+import Form from 'antd/lib/form/Form';
 
 const { Title, Paragraph, Text, Link } = Typography;
 const ContentWrapper = styled.div`    
@@ -12,7 +14,20 @@ const ContentWrapper = styled.div`
 
 const { Header, Content, Footer } = Layout;
 const onSearch = value => console.log(value);
+
+
+
 const Home = () => {
+    const [logInLoading, onChangeLoginLoading, setIsLoggedIn ]= useInput(false);
+    const [email, onChangeEmail] = useInput('pensieve92@gmail.com');
+    const [password, onChangePassword] = useInput('123456');
+
+    const onSubmitForm = useCallback(() => {
+        console.log(email, password);        
+        setIsLoggedIn(true);
+        // dispatch(loginRequestAction({email, password}));        
+    }, [email, password]);
+
     return(
             <div>
                 <Head>
@@ -74,24 +89,40 @@ const Home = () => {
                                     </div>
                                 </Col>                                
                                 <Col span={8}>
-                                    <div style={{height: '23rem', backgroundColor:'white', borderRadius:'0.5rem', padding: '0.5rem'}}>
-                                        <Divider orientation="left">ID</Divider>
-                                             <Input
-                                                name='user_id'
-                                                placeholder="Enter your id"
+                                    <Form onFinish={onSubmitForm}> 
+                                        <div style={{height: '23rem', backgroundColor:'white', borderRadius:'0.5rem', padding: '0.5rem'}}>                                        
+                                            <Divider orientation="left">E-MAIL</Divider>
+                                            <Input name='user_email' 
+                                                type="email"
+                                                value={email} 
+                                                onChange={onChangeEmail} 
                                                 prefix={<UserOutlined className="site-form-item-icon" />}
                                                 suffix={
                                                     <Tooltip title="Extra information">
-                                                    <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
+                                                        <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
                                                     </Tooltip>
                                                 }
+                                                placeholder="input email"
+                                                required
                                             />
-                                        <Divider orientation="left">E-MAIL</Divider>
-                                        <Input name='user_email' type="email" placeholder="input email"/>
-                                        <Divider orientation="left">PASSWORD</Divider>
-                                        <Input.Password name='user_password' placeholder="input password" />
-                                        <Button type="primary"  style={{height:'4rem', width:'100%', marginTop:'1rem', fontWeight:'600', fontSize:'1.5rem'}}> Sign up for MaeSsil</Button>
-                                    </div>
+                                            <Divider orientation="left">PASSWORD</Divider>
+                                            <Input.Password 
+                                                name='user_password' 
+                                                value={password} 
+                                                onChange={onChangePassword} 
+                                                placeholder="input password" 
+                                                required
+                                            />
+                                            <Button 
+                                                type="primary" 
+                                                htmlType="submit"
+                                                loading={logInLoading}                                                
+                                                style={{height:'4rem', width:'100%', marginTop:'1rem', fontWeight:'600', fontSize:'1.5rem'}}
+                                            >
+                                                LOGIN
+                                            </Button>
+                                        </div>
+                                    </Form>
                                 </Col>                         
                             </Row>
                     </ContentWrapper>
