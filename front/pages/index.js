@@ -31,7 +31,7 @@ const Home = () => {
                                 onSearch={onSearch} 
                                 enterButton 
                                 style={{width: '10rem'}}/>,
-                            <Button key="3" type="primary">회원가입</Button>,                   
+                                <Button key="3" type="primary">회원가입</Button>,                   
                             ]}                                           
                         avatar={{ src: '/maessil.png' }}                        
                     />

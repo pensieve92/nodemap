@@ -1,25 +1,30 @@
 import React, { useCallback } from 'react';
-import { Input, Button, Divider, Row, Col, Tooltip, Typography } from 'antd'; 
+import { Input, Button, Divider, Row, Col, Tooltip, Typography, Form } from 'antd'; 
 import { InfoCircleOutlined, UserOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { logInRequest } from '../slices/user'
+
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
-import Form from 'antd/lib/form/Form';
 
-const InitContent = () => {
-    const { Title, Paragraph, Text, Link } = Typography;
-    const ContentWrapper = styled.div`    
+const ContentWrapper = styled.div`    
         padding: 0 4rem;
         height: calc(100vh - 10rem);  
     `
 
-    const [logInLoading, onChangeLoginLoading, setIsLoggedIn ]= useInput(false);
+const InitContent = () => {
+    const dispatch = useDispatch();
+    const { me, logInLoading } = useSelector((state) => (state.user));
+    const { Title, Paragraph, Text, Link } = Typography;    
+
+    // const [logInLoading, onChangeLoginLoading, setIsLoggedIn ]= useInput(false);
     const [email, onChangeEmail] = useInput('pensieve92@gmail.com');
     const [password, onChangePassword] = useInput('123456');
 
     const onSubmitForm = useCallback(() => {
         console.log(email, password);        
-        setIsLoggedIn(true);
-        // dispatch(loginRequestAction({email, password}));        
+        // setIsLoggedIn(true);
+        dispatch(logInRequest({email, password}));        
     }, [email, password]);
 
 

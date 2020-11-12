@@ -1,10 +1,11 @@
 import {configureStore} from "@reduxjs/toolkit";
 import {createWrapper, HYDRATE} from 'next-redux-wrapper'
-
-import treeReducer from "../slices/tree";
 import createSagaMiddleware  from 'redux-saga';
 
 import rootSaga from '../sagas';
+import userReducer from  '../slices/user';
+import treeReducer from '../slices/tree';
+
 
 const appReducer = (state = {}, action) => {
     switch (action.type) {
@@ -29,7 +30,8 @@ const sagaMiddleware = createSagaMiddleware();
 export const makeStore = () => {
   const store = configureStore({
     reducer: {
-          tree: treeReducer,
+          user: userReducer,
+          tree: treeReducer,          
           appReducer
     },
     middleware : [sagaMiddleware],
