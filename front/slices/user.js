@@ -1,9 +1,19 @@
 
 import {createSlice} from "@reduxjs/toolkit";
+import shortid from 'shortid';
+import faker from 'faker';
+
+const dummyUser = (data) => ({    
+    nickanme: 'jbh',
+    id: data.email,
+    Posts:[],
+    Followings:[],
+    Followers:[],   
+   })
 
 const userSlice = createSlice({
 	name: "user",
-	initialState: {
+	initialState: {       
         logInLoading: false,
         logInDone: false,
         logInError: null,
@@ -28,7 +38,7 @@ const userSlice = createSlice({
             state.logInLoading = false;
             state.logInDone = true;      
             console.log("slice-logInSuccess", action.payload);
-            // state.me = dummyUser(action.payload);
+            state.me = dummyUser(action.payload);
         },
         logInFailure:(state, action) => {
             state.logInLoading = false;
