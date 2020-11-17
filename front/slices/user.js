@@ -47,6 +47,7 @@ const userSlice = createSlice({
             console.log("slice-logInFailure", action.payload);
         },
         logOutRequest:(state, action) => {
+            console.log("slice-logOutRequest", action);
             state.logOutLoading = true;
             state.logOutDone    = false;
             state.logOutError   = null;

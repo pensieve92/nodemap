@@ -12,8 +12,8 @@ const { Header, Content, Footer } = Layout;
 const onSearch = value => console.log(value);
 
 const Home = () => {
-    const router = useRouter()
-    const [logInLoading, onChangeLoginLoading, setIsLoggedIn ]= useInput(false);
+    const router = useRouter();
+    
     const { me } = useSelector((state) => state.user);    
   
     useEffect(()=>{
@@ -23,8 +23,6 @@ const Home = () => {
           console.log("언마운트 업데이트전 clean up");
         }
       }, [me])
-    
-
 
     return(
             <div>
@@ -35,9 +33,9 @@ const Home = () => {
                 
                 <Layout className="layout">
                     <PageHeader
-                        style={{height: '5rem'}}
-                        title="매실하실??"                        
-                        subTitle="매실것 좀 주소~"
+                        style={{height: '3.5rem'}}
+                        title="매실하실?!"                        
+                        subTitle="HOME"
                         extra={[
                             <Input.Search 
                                 key="1"

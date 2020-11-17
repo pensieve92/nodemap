@@ -9,7 +9,7 @@ import useInput from '../hooks/useInput';
 
 const ContentWrapper = styled.div`    
         padding: 0 4rem;
-        height: calc(100vh - 10rem);  
+        height: calc(100vh - 8.5rem);  
     `
 
 const InitContent = () => {
@@ -68,7 +68,7 @@ const InitContent = () => {
                     </Col>                                
                     <Col span={8}>
                         <Form onFinish={onSubmitForm}> 
-                            <div style={{height: '23rem', backgroundColor:'white', borderRadius:'0.5rem', padding: '0.5rem'}}>                                        
+                            <div style={{height: '20rem', backgroundColor:'white', borderRadius:'0.5rem', padding: '0.5rem'}}>                                        
                                 <Divider orientation="left">E-MAIL</Divider>
                                 <Input name='user_email' 
                                     type="email"
@@ -95,7 +95,7 @@ const InitContent = () => {
                                     type="primary" 
                                     htmlType="submit"
                                     loading={logInLoading}                                                
-                                    style={{height:'4rem', width:'100%', marginTop:'1rem', fontWeight:'600', fontSize:'1.5rem'}}
+                                    style={{height:'5rem', width:'100%', marginTop:'2rem', fontWeight:'600', fontSize:'1.5rem'}}
                                 >
                                     LOGIN
                                 </Button>
