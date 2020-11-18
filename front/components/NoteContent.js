@@ -41,7 +41,7 @@ const NoteContent = () => {
                 </Col>                
                 <Col flex="auto" style={{backgroundColor: 'rgba(242,245,245,0.8)'}}>
                     <Spin size="large" spinning={false} delay={500}>
-                        {/* <NoteHome /> */}
+                        <NoteHome />
                         {/* <NoteTab /> */}
                     </Spin>
                 </Col>                                

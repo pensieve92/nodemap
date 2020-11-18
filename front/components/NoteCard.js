@@ -3,20 +3,12 @@ import React from 'react';
 
 const NoteCard = ({title}) => {
     return (
-        <Card title="Card title">
-            <Card type="inner" title="Inner Card title" extra={<a href="#">More</a>}>
-            Inner Card content
+            <Card type='inner' title="Default size card" extra={<a href="#">More</a>} >
+                <p>Card content</p>
+                <p>Card content</p>
+                <p>Card content</p>
             </Card>
-            <Card
-            style={{ marginTop: 16 }}
-            type="inner"
-            title="Inner Card title"
-            extra={<a href="#">More</a>}
-            >
-            Inner Card content
-            </Card>
-        </Card>
-    )
+            )
 }
 
 export default NoteCard;
