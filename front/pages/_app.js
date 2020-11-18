@@ -9,11 +9,27 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 import { wrapper } from "../store/store"; // redux-toolKit 적용 후
 import withReduxSaga from 'next-redux-saga';
 
+import { createGlobalStyle } from 'styled-components'
+
 class MyApp extends App {
+
   render() {
     const { Component, pageProps } = this.props;
 
-    return <Component {...pageProps} />;
+    const GlobalStyle = createGlobalStyle`
+    html, body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+  `
+
+    return  (
+      <>
+        <GlobalStyle />
+        <Component {...pageProps} />
+      </>
+    );
   }
 }
 

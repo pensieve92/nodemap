@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Input, Button, Divider, Row, Col, Tooltip, Typography, Form } from 'antd'; 
 import { InfoCircleOutlined, UserOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,6 +27,11 @@ const InitContent = () => {
         dispatch(logInRequest({email, password}));        
     }, [email, password]);
 
+
+    useEffect(() => {
+        // FIXME 개발용 자동 로그인
+        dispatch(logInRequest({email, password}));         
+    }, [])
 
     return (
         <>
