@@ -21,7 +21,7 @@ const NoteContent = () => {
         <ContentWrapper>                    
             <Row justify="start" style={{height:'calc(100vh - 3.5rem)'}}>                                                            
                 <Col flex="200px" style={{backgroundColor: 'white'}} >
-                    <Row justify="center" style={{margin: 'auto'}}>
+                    <Row justify="center" style={{margin: 'auto', height:'3.5rem'}}>
                         <Button 
                             style={{marginTop: '0.75rem', marginBattom: '0.75rem', marginLeft: '-1rem'}}
                             type='default'
@@ -39,7 +39,12 @@ const NoteContent = () => {
 
                     </Row>
                 </Col>                
-                <Col flex="auto" style={{backgroundColor: 'rgba(242,245,245,0.8)'}}>
+                <Col flex="auto" 
+                    style={{
+                        width: 'calc(100vw - 200px)', 
+                        height: 'calc(100vh - 3rem)',
+                        overflowY:'auto', 
+                        backgroundColor: 'rgba(242,245,245,0.8)'}}>
                     <Spin size="large" spinning={false} delay={500}>
                         <NoteHome />
                         {/* <NoteTab /> */}

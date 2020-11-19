@@ -14,7 +14,7 @@ const NoteMenu = () => {
     return (
         <Menu
         onClick={handleClick}
-        style={{ width: 200, height:'calc(100vh - 3.5rem)', overflowY: 'auto'}}
+        style={{ width: 200, height:'calc(100vh - 7rem + 0.9rem)', overflowY: 'auto'}}
         defaultSelectedKeys={['1']}
         defaultOpenKeys={['sub1']}
         mode="inline"

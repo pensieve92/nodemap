@@ -19,7 +19,9 @@ class MyApp extends App {
     const GlobalStyle = createGlobalStyle`
     html, body {
       margin: 0;
-      height: 100%;            
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
     }
   `
 
