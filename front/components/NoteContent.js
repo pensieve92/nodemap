@@ -44,7 +44,9 @@ const NoteContent = () => {
                         width: 'calc(100vw - 200px)', 
                         height: 'calc(100vh - 3rem)',
                         overflowY:'auto', 
-                        backgroundColor: 'rgba(242,245,245,0.8)'}}>
+                        backgroundColor: 'rgba(242,245,245,0.8)',
+                        padding:'1.5rem'
+                    }}>
                     <Spin size="large" spinning={false} delay={500}>
                         <NoteHome />
                         {/* <NoteTab /> */}
