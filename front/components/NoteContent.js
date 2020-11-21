@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Input, Button, Divider, Row, Col, Tooltip, Typography, Form, Spin } from 'antd'; 
+import { Input, Button, Divider, Row, Col, Tooltip, Typography, Form, Spin, BackTop } from 'antd'; 
 import { InfoCircleOutlined, UserOutlined, PlusOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { logInRequest } from '../slices/user'
@@ -9,6 +9,9 @@ import styled from 'styled-components';
 import NoteTab from './NoteTab';
 import NoteHome from './NoteHome';
 import NoteMenu from './NoteMenu';
+import NoteList from './NoteList';
+import NoteBreadcrumb from './NoteBreadcrumb';
+import NoteHeader from './NoteHeader';
 
 const ContentWrapper = styled.div`
         height: calc(100vh - 3.5rem);
@@ -45,10 +48,14 @@ const NoteContent = () => {
                         height: 'calc(100vh - 3rem)',
                         overflowY:'auto', 
                         backgroundColor: 'rgba(242,245,245,0.8)',
-                        padding:'1.5rem'
-                    }}>
+                        padding:'0.5rem 1.5rem 1.5rem'
+                    }}>                    
+                    <strong className="site-back-top-basic"> gray </strong>
                     <Spin size="large" spinning={false} delay={500}>
-                        <NoteHome />
+                        {/* <NoteBreadcrumb /> */}
+                        <NoteHeader />
+                        {/* <NoteHome /> */}
+                        <NoteList />
                         {/* <NoteTab /> */}
                     </Spin>
                 </Col>                                

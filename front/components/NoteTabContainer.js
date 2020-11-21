@@ -8,7 +8,7 @@ import TuiEditor from './TuiEditor';
 const NoteTabContiner = ({data}) => {    
     return (        
         <div>            
-            Title : {data}
+            {/* Title : {data} */}
             <TuiEditor />
         </div>
     )
