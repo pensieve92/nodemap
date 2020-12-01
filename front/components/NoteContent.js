@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Input, Button, Divider, Row, Col, Tooltip, Typography, Form, Spin, BackTop } from 'antd'; 
 import { InfoCircleOutlined, UserOutlined, PlusOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,6 +18,9 @@ const ContentWrapper = styled.div`
     `
 
 const NoteContent = () => {
+    const [isNoteHome, setIsNoteHome] = useState(true);
+    const [isNoteList, setIsNoteList] = useState(false);
+    const [isNoteTab, setIsisNoteTab] = useState(true);
 
     return (
         <>
@@ -50,12 +53,18 @@ const NoteContent = () => {
                         backgroundColor: 'rgba(242,245,245,0.8)',
                         padding:'0.5rem 1.5rem 1.5rem'
                     }}>                    
-                    <strong className="site-back-top-basic"> gray </strong>
+                    {/* <strong className="site-back-top-basic"> gray </strong> */}
                     <Spin size="large" spinning={false} delay={500}>
+                        
                         {/* <NoteBreadcrumb /> */}
+                        
                         <NoteHeader />
+                        { isNoteHome && <NoteHome /> }
+                        { isNoteList && <NoteList /> }
+                        { isNoteTab && <NoteTab /> }
+                        
                         {/* <NoteHome /> */}
-                        <NoteList />
+                        {/* <NoteList /> */}
                         {/* <NoteTab /> */}
                     </Spin>
                 </Col>                                
