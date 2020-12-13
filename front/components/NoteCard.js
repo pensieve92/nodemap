@@ -11,7 +11,7 @@ const NoteCard = ({title}) => {
                 title={
                     <Space size="small">
                         <ReadOutlined /> 
-                        <Link href="/">
+                        <Link href="/note/[noteRouter]" as="/note/post">
                             <a>here is title</a>
                         </Link>
                     </Space>

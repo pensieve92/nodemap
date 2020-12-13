@@ -1,68 +1,102 @@
 import React from 'react';
 import { Menu } from 'antd';
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
-
-
+import { AppstoreOutlined } from '@ant-design/icons';
+import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import { notePathUpdate } from '../slices/note'
 
 const NoteMenu = () => {
-    const { SubMenu } = Menu;
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { SubMenu } = Menu;
+  const MenuList = [
+    {
+      id: "1",
+      title: "Option 1",
+      parent: null
+    },
+    {
+      id: "2",
+      title: "Option 2",
+      parent: null
+    },
+    {
+      id: "3",
+      title: "Option 3",
+      parent: null
+    },
+    {
+      id: "4",
+      title: "Option 4",
+      parent: "3"
+    },
+    {
+      id: "5",
+      title: "Option 5",
+      parent: "3"
+    }
+  ];
 
-    const handleClick = e => {
-        console.log('click ', e);
-    };
+  const generateMenu = (menuList) => {
+    return menuList.reduce(function(acc, curItem, curIndex, arr){        
+        const children = arr.filter((item) => item.parent == curItem.id );
+        if(children.length > 0) {
+            curItem.children = children;
+            acc.push(curItem);
+        }else if(!curItem.parent){
+            acc.push(curItem);
+        }
+        return acc
+    }, [])
+  }    
+  const childMenu =  generateMenu(MenuList);
 
-    return (
-        <Menu
+  const handleClick = e => {
+    const menuId = e.key;
+    // 선택된 메뉴
+    const selectedMenu = MenuList.find((item) => item.id === menuId);
+    // 부모 메뉴
+    const parentMenu = MenuList.find((item) => item.id === selectedMenu.parent);
+    
+    if(parentMenu){
+      parentMenu.children = selectedMenu;
+      dispatch(notePathUpdate({notePath: parentMenu})); // {}로 감싸서 action.payload에서 구조분해할당
+    }else{
+      // notePath.push(selectedMenu);
+      dispatch(notePathUpdate({notePath: selectedMenu})); // {}로 감싸서 action.payload에서 구조분해할당
+    }
+
+    // dispatch(notePathUpdate({notePath: parentMenu})); // {}로 감싸서 action.payload에서 구조분해할당
+
+    router.push({
+      pathname: '/note/post',
+      query: { selectedKey: menuId },
+    })
+  };
+
+  return (
+      <Menu
         onClick={handleClick}
         style={{ width: 200, height:'calc(100vh - 7rem + 0.9rem)', overflowY: 'auto'}}
-        defaultSelectedKeys={['1']}
-        defaultOpenKeys={['sub1']}
+        defaultSelectedKeys={['libary']}
+        defaultOpenKeys={['libary']}
         mode="inline"
-        
       >
-          <SubMenu
-          key="sub1"
-          title={
-            <span>
-              <MailOutlined />
-              <span>Navigation One</span>
-            </span>
+        <SubMenu key="libary" icon={<AppstoreOutlined />} title="libary">
+          {
+            childMenu.map((item) => {          
+              return item.children ? 
+              <SubMenu key={item.id} title={item.title}>
+                {item.children.map((childItem) => {
+                  return <Menu.Item key={childItem.id}>{childItem.title}</Menu.Item>
+                })}
+              </SubMenu>
+              : <Menu.Item key={item.id}>{item.title}</Menu.Item>
+            })
           }
-        >
-          <Menu.ItemGroup key="g1" title="Item 1">
-            <Menu.Item key="1">Option 1</Menu.Item>
-            <Menu.Item key="2">Option 2</Menu.Item>
-          </Menu.ItemGroup>
-          <Menu.ItemGroup key="g2" title="Item 2">
-            <Menu.Item key="3">Option 3</Menu.Item>
-            <Menu.Item key="4">Option 4</Menu.Item>
-          </Menu.ItemGroup>
-        </SubMenu>
-        <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Navigation Two">
-          <Menu.Item key="5">Option 5</Menu.Item>
-          <Menu.Item key="6">Option 6</Menu.Item>
-          <SubMenu key="sub3" title="Submenu">
-            <Menu.Item key="7">Option 7</Menu.Item>
-            <Menu.Item key="8">Option 8</Menu.Item>
-          </SubMenu>
-        </SubMenu>
-        <SubMenu
-          key="sub4"
-          title={
-            <span>
-              <SettingOutlined />
-              <span>Navigation Three</span>
-            </span>
-          }
-        >
-          <Menu.Item key="9">Option 9</Menu.Item>
-          <Menu.Item key="10">Option 10</Menu.Item>
-          <Menu.Item key="11">Option 11</Menu.Item>
-          <Menu.Item key="12">Option 12</Menu.Item>
-        </SubMenu>
-      </Menu>
-    );
-
+      </SubMenu>
+    </Menu>
+  );
 }
 
 export default NoteMenu;

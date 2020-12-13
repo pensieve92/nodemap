@@ -5,6 +5,7 @@ import createSagaMiddleware  from 'redux-saga';
 import rootSaga from '../sagas';
 import userReducer from  '../slices/user';
 import treeReducer from '../slices/tree';
+import noteReducer from '../slices/note';
 
 
 const appReducer = (state = {}, action) => {
@@ -31,7 +32,8 @@ export const makeStore = () => {
   const store = configureStore({
     reducer: {
           user: userReducer,
-          tree: treeReducer,          
+          tree: treeReducer, 
+          note: noteReducer,         
           appReducer
     },
     middleware : [sagaMiddleware],

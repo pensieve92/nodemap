@@ -11,7 +11,7 @@ import NoteContent from '../../components/NoteContent';
 const { Header, Content, Footer } = Layout;
 const onSearch = value => console.log(value);
 
-const Home = () => {
+const Note = () => {
     const { me } = useSelector((state) => state.user);
     const router = useRouter();
     const dispatch = useDispatch();
@@ -72,4 +72,4 @@ const Home = () => {
         )
     };
 
-export default Home;
+export default Note;

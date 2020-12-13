@@ -18,7 +18,7 @@ const Home = () => {
   
     useEffect(()=>{
         console.log("마운트 될 때만 실행하고 싶을 때");
-        me && router.push('/note');
+        me && router.push('/note/home');
         return () => {  
           console.log("언마운트 업데이트전 clean up");
         }

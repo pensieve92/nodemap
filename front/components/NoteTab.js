@@ -70,6 +70,7 @@ class Demo extends React.Component {
     const { panes, activeKey } = this.state;
     return (
       <DraggableTabs
+        tabPosition="right"
         type="editable-card"
         onChange={this.onChange}
         activeKey={activeKey}

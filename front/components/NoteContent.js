@@ -10,22 +10,17 @@ import NoteTab from './NoteTab';
 import NoteHome from './NoteHome';
 import NoteMenu from './NoteMenu';
 import NoteList from './NoteList';
-import NoteBreadcrumb from './NoteBreadcrumb';
-import NoteHeader from './NoteHeader';
+import NoteHeader from './NoteContentHeader';
 
 const ContentWrapper = styled.div`
         height: calc(100vh - 3.5rem);
     `
 
-const NoteContent = () => {
-    const [isNoteHome, setIsNoteHome] = useState(true);
-    const [isNoteList, setIsNoteList] = useState(false);
-    const [isNoteTab, setIsisNoteTab] = useState(true);
-
+const NoteContent = ({children}) => {
     return (
-        <>
         <ContentWrapper>                    
-            <Row justify="start" style={{height:'calc(100vh - 3.5rem)'}}>                                                            
+            <Row justify="start" style={{height:'calc(100vh - 3.5rem)'}}>
+                {/* 왼쪽 메뉴 */}
                 <Col flex="200px" style={{backgroundColor: 'white'}} >
                     <Row justify="center" style={{margin: 'auto', height:'3.5rem'}}>
                         <Button 
@@ -40,11 +35,10 @@ const NoteContent = () => {
                     </Row>
                     <Row justify="start">
                         <NoteMenu />
-                    </Row>
-                    <Row justify="start">
-
-                    </Row>
-                </Col>                
+                    </Row>                    
+                </Col>
+                {/* 왼쪽 메뉴 */}
+                {/* 노트 내용 */}
                 <Col flex="auto" 
                     style={{
                         width: 'calc(100vw - 200px)', 
@@ -53,26 +47,18 @@ const NoteContent = () => {
                         backgroundColor: 'rgba(242,245,245,0.8)',
                         padding:'0.5rem 1.5rem 1.5rem'
                     }}>                    
-                    {/* <strong className="site-back-top-basic"> gray </strong> */}
                     <Spin size="large" spinning={false} delay={500}>
-                        
-                        {/* <NoteBreadcrumb /> */}
-                        
+                        {/* children 자리 */}
+                        {/* {children} */}
                         <NoteHeader />
-                        { isNoteHome && <NoteHome /> }
-                        { isNoteList && <NoteList /> }
-                        { isNoteTab && <NoteTab /> }
-                        
-                        {/* <NoteHome /> */}
+                        <NoteHome />
                         {/* <NoteList /> */}
                         {/* <NoteTab /> */}
                     </Spin>
-                </Col>                                
-                
-                
+                </Col>
+                {/* 노트 내용 */}
             </Row>
         </ContentWrapper>
-        </>
     )
 }
 
