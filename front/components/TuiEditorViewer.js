@@ -1,9 +1,9 @@
 import dynamic from 'next/dynamic';
 import React, { forwardRef, useCallback, useRef } from 'react';
-const Editor = dynamic(() => import("./TuiEditorWrapper"), { ssr: false });
-const EditorWithForwardedRef = forwardRef((props, ref) => (<Editor {...props} forwardedRef={ref} />));
+const Viewer = dynamic(() => import("./TuiEditorViewerWrapper"), { ssr: false });
+const EditorViewerWithForwardedRef = forwardRef((props, ref) => (<Viewer {...props} forwardedRef={ref} />));
 
-const WysiwygEditor = (props) => {
+const WysiwygEditorViewer = (props) => {
     const { initialValue, previewStyle, height, initialEditType, useCommandShortcut } = props;
     const editorRef = useRef();
     const handleChange = useCallback(() => {
@@ -14,13 +14,11 @@ const WysiwygEditor = (props) => {
         const valueType = props.valueType || "markdown";
         // props.onChange(valueType === "markdown" ? instance.getMarkdown() : instance.getHtml());
     }, [props, editorRef]);
-    console.log("EditorWithForwardedRef", EditorWithForwardedRef);
-    console.log("Editor factory", Editor.factory);
     return (
         <div>
-            <EditorWithForwardedRef
+            <EditorViewerWithForwardedRef
             {...props}
-            initialValue={initialValue || "hello react editor world!"}
+            initialValue={initialValue || "<h1>hi</h1>"}
             previewStyle={previewStyle || "vertical"}
             height={height || "600px"}
             initialEditType={initialEditType || "markdown"}
@@ -31,4 +29,4 @@ const WysiwygEditor = (props) => {
       </div>
       )    
 };
-export default WysiwygEditor;
+export default WysiwygEditorViewer;

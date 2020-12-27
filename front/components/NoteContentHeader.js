@@ -14,7 +14,11 @@ const NoteHeader = () => {
     const { notePath } = useSelector((state) => (state.note));
     // notePath가 배열로 return 됨.
     console.log("NoteHeader-notePath", notePath);
-    
+
+    // 전체보기
+    const handleClick = () => {
+        router.push('/note/viewer');
+    }  
     return (
         <PageHeader
             className="site-page-header"
@@ -74,7 +78,10 @@ const NoteHeader = () => {
             style={{padding:'0'}}
             subTitle= ""
             extra={[
-                <Button key="1" type="primary">
+                <Button 
+                    onClick={handleClick}
+                    key="1" 
+                    type="primary">
                     전체 보기
                 </Button>,
                 ]}

@@ -6,6 +6,7 @@ import NoteTab from './NoteTab';
 import NoteHome from './NoteHome';
 import NoteMenu from './NoteMenu';
 import NoteList from './NoteList';
+import NoteViewer from './NoteViewer';
 import NoteContentHeader from './NoteContentHeader';
 import NoteLeftMenu from './NoteLeftMenu';
 import { useDispatch, useSelector } from 'react-redux';
@@ -61,7 +62,7 @@ const NoteContentLayout = () => {
                             noteRouter === "postList"  ? <NoteList/> : 
                             noteRouter === "post"      ? <NoteList/> :                             
                             noteRouter === "editor"    ? <NoteTab/> : 
-                            noteRouter === "viewer"    ? null : null
+                            noteRouter === "viewer"    ? <NoteViewer/> : null
                         }
                     </Spin>
                 </Col>
